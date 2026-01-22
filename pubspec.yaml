@@ -51,6 +51,7 @@ flutter:
   assets:
     - assets/images/
     - assets/animations/
+    - assets/docs/
 
   # Custom fonts (if needed, otherwise using Google Fonts)
   # fonts:

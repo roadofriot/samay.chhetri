@@ -52,7 +52,7 @@ git commit -m "Deploy to GitHub Pages: $(date)"
 
 # Push to gh-pages
 echo "⬆️ Pushing..."
-git push --force "$REMOTE_URL" master:gh-pages
+git push --force "$REMOTE_URL" HEAD:gh-pages
 
 # Clean up
 cd ..

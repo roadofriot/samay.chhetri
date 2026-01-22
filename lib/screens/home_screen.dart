@@ -126,20 +126,27 @@ class _HomeScreenState extends State<HomeScreen> {
     // Increment download count
     context.read<StatsProvider>().incrementCvDownload();
 
-    // TODO: Replace with actual CV file URL
-    final cvUrl = 'https://example.com/sammy_cv.pdf';
+    // URL for the CV (served from assets in the web build)
+    // Note: In Flutter Web release, assets are typically located at assets/assets/path/to/file
+    final cvUrl = 'assets/assets/docs/Samay_Chhetri_Resume_2026.pdf';
 
     final uri = Uri.parse(cvUrl);
     if (await canLaunchUrl(uri)) {
-      await launchUrl(uri, mode: LaunchMode.externalApplication);
+      await launchUrl(uri, mode: LaunchMode.platformDefault);
     } else {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('CV download link not configured yet'),
-            duration: Duration(seconds: 2),
-          ),
-        );
+      // Fallback: try opening it directly if launchUrl fails check
+      // Sometimes canLaunchUrl returns false for relative paths on web
+      try {
+        await launchUrl(uri, mode: LaunchMode.platformDefault);
+      } catch (e) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Could not open CV. Please try again later.'),
+              duration: Duration(seconds: 2),
+            ),
+          );
+        }
       }
     }
   }
